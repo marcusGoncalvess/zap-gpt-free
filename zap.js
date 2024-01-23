@@ -1,16 +1,17 @@
-const fs = require('fs');
 const venom = require('venom-bot');
-const axios = require('axios');
+const { mainOpenAI } = require('./openai');
 
-const axiosCreate = axios.create({
-  baseURL: 'http://localhost:1234/v1',
-});
+require('dotenv').config();
+const oldMessages = [];
+let messageBuffer = [];
+let timeoutId = null;
+const TIMEOUT_DURATION = 6000;
 
 venom
   .create(
     'sessionName',
     (base64Qr, asciiQR, attempts, urlCode) => {
-      console.log(asciiQR); // Optional to log the QR in the terminal
+      console.log(asciiQR);
     },
     undefined,
     { logQR: false }
@@ -23,53 +24,39 @@ venom
   });
 
 function start(client) {
-  // const targetNumber = '555197575710@c.us';
-  const targetNumber = '555193402351@c.us';
-
-  // client
-  //   .sendText(targetNumber, 'Olá! Essa é uma mensagem automática do Venom 🕷️')
-  //   .then((result) => {
-  //     console.log('Mensagem enviada:', result);
-  //   })
-  //   .catch((erro) => {
-  //     console.error('Erro ao enviar mensagem:', erro);
-  //   });
-
-  const awserMessage = async (message) => {
-    const data = {
-      model: 'local-model',
-      messages: [
-        {
-          role: 'system',
-          content: 'É para você fingir ser eu, falando com um amigo.',
-        },
-        { role: 'user', content: message },
-      ],
-    };
-
-    const res = await axiosCreate.post('/chat/completions', data);
-
-    return res.data.choices[0].message.content;
-  };
+  const targetNumber = '554898323264@c.us';
 
   client.onMessage(async (message) => {
-    console.log(message);
-    if (message.from === targetNumber) {
-      console.log('Nova mensagem recebida de:', message.from);
-      console.log('Mensagem:', message.body);
+    console.log('message:', message);
+    if (message.from === targetNumber && message.type === 'chat') {
+      messageBuffer.push({ content: message.body, role: 'user' });
 
-      const resposta = await awserMessage(message.body);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
 
-      console.log({ resposta });
+      timeoutId = setTimeout(async () => {
+        const answer = await mainOpenAI(messageBuffer, oldMessages, history);
+        oldMessages.push(
+          ...messageBuffer.map((msg) => ({
+            content: msg.content,
+            role: 'user',
+          }))
+        );
+        oldMessages.push({ content: answer, role: 'assistant' });
 
-      client
-        .sendText(targetNumber, resposta)
-        .then((result) => {
-          console.log('Mensagem enviada:', result);
-        })
-        .catch((erro) => {
-          console.error('Erro ao enviar mensagem:', erro);
-        });
+        client
+          .sendText(targetNumber, answer)
+          .then((result) => {
+            console.log('Mensagem enviada:', result);
+          })
+          .catch((erro) => {
+            console.error('Erro ao enviar mensagem:', erro);
+          });
+
+        messageBuffer = [];
+        timeoutId = null;
+      }, TIMEOUT_DURATION);
     }
   });
 }

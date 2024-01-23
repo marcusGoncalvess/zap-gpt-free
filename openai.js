@@ -1,26 +1,34 @@
-const axios = require('axios');
+const OpenAI = require('openai');
 
-const client = axios.create({
-  baseURL: 'http://localhost:1234/v1',
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_KEY,
 });
+const prompt = `Você se chama Marcus, tem 21 anos e é desenvolvedor de software,`;
 
-const data = {
-  model: 'local-model',
-  messages: [
-    {
-      role: 'system',
-      content: 'É para você fingir ser eu, falando com um amigo. Responda com um limite de 50 tokens',
-    },
-    { role: 'user', content: 'oii' },
-    // {
-    //   role: 'assistant',
-    //   content: 'The Los Angeles Dodgers won the World Series in 2020.',
-    // },
-    // { role: 'user', content: 'Where was it played?' },
-  ],
-};
+async function mainOpenAI(currentMessage, oldMessages, history) {
+  console.log({ currentMessage, oldMessages, history });
 
-client.post('/chat/completions', data).then((res) => {
-  console.log({ res: res.data.choices[0].message });
-});
+  const systemMessage = {
+    role: 'system',
+    content: `${prompt}. Aqui estão as últimas mensagens da sua conversa, responda do mesmo jeito que você estava respondendo: ${history.join(
+      ';'
+    )}`,
+  };
+  const messages = oldMessages.length
+    ? [systemMessage, ...oldMessages]
+    : [systemMessage];
+  messages.push(...currentMessage);
 
+  console.log('messages sended to api', messages);
+
+  const completion = await openai.chat.completions.create({
+    messages,
+    model: 'gpt-3.5-turbo',
+  });
+
+  console.log(completion.choices[0]);
+
+  return completion.choices[0].message.content;
+}
+
+module.exports = { mainOpenAI };
