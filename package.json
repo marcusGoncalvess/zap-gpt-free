@@ -2,17 +2,38 @@
   "name": "zap-gpt",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Marcus Gonçalves",
+    "email": "marcusgoncalves067@gmail.com"
+  },
   "license": "ISC",
+  "type": "module",
   "dependencies": {
     "axios": "^1.6.5",
+    "csv-stringify": "^6.4.5",
     "dotenv": "^16.3.2",
     "openai": "^4.24.2",
     "venom-bot": "^5.0.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.8",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^3.2.4",
+    "tsup": "^8.0.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
   }
 }
