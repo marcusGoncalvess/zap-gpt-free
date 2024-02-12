@@ -1,5 +1,8 @@
-export function splitMessages(text: string): RegExpMatchArray | null {
-  return text.match(/[^.?!]+[.?!]+["']?|[^.?!]+$/g);
+import type venom from 'venom-bot';
+
+export function splitMessages(text: string): string[] {
+  const matches = text.match(/[^.?!]+[.?!]+["']?|[^.?!]+$/g);
+  return matches ?? [];
 }
 
 export async function sendMessagesWithDelay({
@@ -7,7 +10,12 @@ export async function sendMessagesWithDelay({
   delay,
   client,
   targetNumber,
-}) {
+}: {
+  messages: string[];
+  delay: number;
+  client: venom.Whatsapp;
+  targetNumber: string;
+}): Promise<void> {
   for (const [index, msg] of messages.entries()) {
     await new Promise((resolve) => setTimeout(resolve, index * delay));
     client
@@ -21,8 +29,16 @@ export async function sendMessagesWithDelay({
   }
 }
 
-export async function getHistoryMessages({ targetNumber, client, history }) {
-  if (history) return;
+export async function getHistoryMessages({
+  targetNumber,
+  client,
+  history,
+}: {
+  targetNumber: string;
+  client: venom.Whatsapp;
+  history: string[];
+}): Promise<void> {
+  if (history.length > 0) return;
   const historyInternal = await client.getAllMessagesInChat(
     targetNumber,
     true,

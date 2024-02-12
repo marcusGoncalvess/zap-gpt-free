@@ -11,9 +11,9 @@ import {
 dotenv.config();
 
 let messageBuffer = [] as string[];
-let messageTimer = null as NodeJS.Timeout | null;
+let messageTimer: NodeJS.Timeout;
 
-let history;
+const history = [] as string[];
 
 venom
   .create(
@@ -37,24 +37,33 @@ async function start(client: venom.Whatsapp): Promise<void> {
   await initializeNewAIChatSession();
   const targetNumber = '555184747980@c.us';
 
-  client.onMessage(async (message) => {
-    if (message.from === targetNumber && message.type === 'chat') {
-      await getHistoryMessages({ client, history, targetNumber });
+  client.onMessage((message) => {
+    (async () => {
+      if (message.from === targetNumber && message.type === 'chat') {
+        await getHistoryMessages({ client, history, targetNumber });
 
-      messageBuffer.push(message.body);
+        messageBuffer.push(message.body);
 
-      clearTimeout(messageTimer);
-      messageTimer = setTimeout(async () => {
-        const answer = await mainOpenAI(
-          messageBuffer.join(' \n '),
-          history,
-          message.sender.name
-        );
-        const messages = splitMessages(answer);
-        const delay = 3000;
-        await sendMessagesWithDelay({ client, delay, messages, targetNumber });
-        messageBuffer = [];
-      }, 10000);
-    }
+        clearTimeout(messageTimer);
+        messageTimer = setTimeout(() => {
+          (async () => {
+            const answer = await mainOpenAI({
+              currentMessage: messageBuffer.join(' \n '),
+              history,
+              name: message.sender.name,
+            });
+            const messages = splitMessages(answer);
+            const delay = 3000;
+            await sendMessagesWithDelay({
+              client,
+              delay,
+              messages,
+              targetNumber,
+            });
+            messageBuffer = [];
+          })();
+        }, 10000);
+      }
+    })();
   });
 }
