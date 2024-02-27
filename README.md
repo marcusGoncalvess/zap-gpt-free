@@ -6,4 +6,5 @@ Este projeto explora a integração do ChatGPT com o WhatsApp, transformando o c
 
 A integração começa com o [venom](https://github.com/orkestral/venom), que estabelece a conexão com o WhatsApp. <br/>
 As mensagens recebidas são então processadas pela API do ChatGPT, que gera respostas coerentes e personalizadas.<br/>
-Na integração com GPT eu usei um [assistant da openai](https://platform.openai.com/docs/assistants/overview), onde é basicamente o modelo do gpt mas já pre-configurado com um prompt detalhadado de como agir.
+Utilizamos um [assistant](https://platform.openai.com/docs/assistants/overview) da OpenAI, que é um do modelo OpenAI que foi pré-configurado com prompts detalhados. </br>
+Esses prompts orientam o assistente sobre como responder de maneira coerente e personalizada, assegurando que as interações não só se mantenham relevantes e engajantes, mas também reflitam uma abordagem humana e natural na conversação.
