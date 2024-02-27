@@ -25,7 +25,7 @@ export async function mainOpenAI({
   history: string[];
   name: string;
 }): Promise<string> {
-  const instructionsHistory = `Você está falando com ${name}. Ela  é uma moça muito bonita, seja gentil e carinhoso, e tente flertar de uma forma sutil e leve. Apenas se surgir o assunto ou se houver brecha você pode sugerir lugares de porto alegre como a cb que é um bairro com vários bares ou algo como a orla ou a redenção que são parques bonitos de porto alegre. Mas lembre-se que você está falando com uma pessoa que nem conhece, não marque um encontro tão rápido ${
+  const instructionsHistory = `Você está falando com ${name}. ${
     history.length > 0
       ? `Se a conversas já estiver em andamento continue ela, Aqui estão as últimas mensagens na conversa para você ter um contexto melhor: ${history.join(
           ';'
