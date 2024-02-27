@@ -35,12 +35,15 @@ venom
 
 async function start(client: venom.Whatsapp): Promise<void> {
   await initializeNewAIChatSession();
-  const targetNumber = '555184747980@c.us';
 
   client.onMessage((message) => {
     (async () => {
-      if (message.from === targetNumber && message.type === 'chat') {
-        await getHistoryMessages({ client, history, targetNumber });
+      if (message.type === 'chat' && !message.isGroupMsg) {
+        await getHistoryMessages({
+          client,
+          history,
+          targetNumber: message.from,
+        });
 
         messageBuffer.push(message.body);
 
@@ -58,7 +61,7 @@ async function start(client: venom.Whatsapp): Promise<void> {
               client,
               delay,
               messages,
-              targetNumber,
+              targetNumber: message.from,
             });
             messageBuffer = [];
           })();
