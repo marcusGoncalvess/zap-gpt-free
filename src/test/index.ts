@@ -1,4 +1,4 @@
-import { mainOpenAI } from '../openai';
+import { mainOpenAI } from "../service/openai";
 
 mainOpenAI(
   {
