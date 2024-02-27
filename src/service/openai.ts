@@ -11,7 +11,7 @@ const openai = new OpenAI({
 
 export async function initializeNewAIChatSession(): Promise<void> {
   assistant = await openai.beta.assistants.retrieve(
-    'asst_ncDjhXpHbteJdoADspjVwrFb'
+    process.env.OPENAT_ASSISTANT!
   );
   thread = await openai.beta.threads.create();
 }
