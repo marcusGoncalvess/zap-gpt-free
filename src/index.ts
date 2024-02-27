@@ -23,6 +23,7 @@ venom
     },
     (statusSession, session) => {
       console.log('Status Session: ', statusSession);
+      console.log(session)
     },
     { logQR: false }
   )
@@ -34,6 +35,7 @@ venom
   });
 
 async function start(client: venom.Whatsapp): Promise<void> {
+  console.log(client)
   await initializeNewAIChatSession();
 
   client.onMessage((message) => {
@@ -44,8 +46,9 @@ async function start(client: venom.Whatsapp): Promise<void> {
           history,
           targetNumber: message.from,
         });
-
+        
         messageBuffer.push(message.body);
+        console.log(message.from)
 
         clearTimeout(messageTimer);
         messageTimer = setTimeout(() => {
