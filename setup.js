@@ -27,6 +27,9 @@ const geminiQuestion = [
     type: 'input',
     name: 'GEMINI_PROMPT',
     message: 'Informe o prompt para o Gemini:',
+    validate: (input) =>
+    !!input ||
+    'A GEMINI_PROMPT não pode ser vazia. Por favor, informe um valor válido.',
   },
 ];
 
@@ -55,7 +58,7 @@ inquirer.prompt(mainQuestion).then((answers) => {
 
   if (answers.AI_SELECTED === 'GEMINI') {
     inquirer.prompt(geminiQuestion).then((geminiAnswer) => {
-      envConfig += `GEMINI_KEY=${geminiAnswer.GEMINI_KEY}\n`;
+      envConfig += `GEMINI_KEY=${geminiAnswer.GEMINI_KEY}\nGEMINI_PROMPT=${geminiAnswer.GEMINI_PROMPT}\n`;
       fs.writeFileSync('.env', envConfig, { encoding: 'utf8' });
       console.log('Configuração para GEMINI salva com sucesso! 🎉');
     });
