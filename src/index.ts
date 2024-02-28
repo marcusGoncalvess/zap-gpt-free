@@ -49,7 +49,7 @@ wppconnect
     console.log(erro);
   });
 
-async function start(client: venom.Whatsapp): Promise<void> {
+async function start(client: wppconnect.Whatsapp): Promise<void> {
   client.onMessage((message) => {
     (async () => {
       if (message.type === 'chat' && !message.isGroupMsg) {
