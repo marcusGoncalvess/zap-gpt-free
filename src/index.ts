@@ -1,19 +1,31 @@
-import venom from 'venom-bot';
+import venom from '@wppconnect-team/wppconnect';
 
 import dotenv from 'dotenv';
 import { initializeNewAIChatSession, mainOpenAI } from './service/openai';
-import {
-  getHistoryMessages,
-  splitMessages,
-  sendMessagesWithDelay,
-} from './util';
+import { splitMessages, sendMessagesWithDelay } from './util';
+import { mainGoogle } from './service/google';
 
 dotenv.config();
+type AIOption = 'GPT' | 'GEMINI';
 
-let messageBuffer = [] as string[];
-let messageTimer: NodeJS.Timeout;
+const messageBufferPerChatId = new Map();
+const messageTimeouts = new Map();
+const AI_SELECTED: AIOption = (process.env.AI_SELECTED as AIOption) || 'GEMINI';
 
-const history = [] as string[];
+if (AI_SELECTED === 'GEMINI' && !process.env.GEMINI_KEY) {
+  throw Error(
+    'Você precisa colocar uma key do Gemini no .env! Crie uma gratuitamente em https://aistudio.google.com/app/apikey?hl=pt-br'
+  );
+}
+
+if (
+  AI_SELECTED === 'GPT' &&
+  (!process.env.OPENAI_KEY || !process.env.OPENAI_ASSISTANT)
+) {
+  throw Error(
+    'Para utilizar o GPT você precisa colocar no .env a sua key da openai e o id do seu assistante.'
+  );
+}
 
 venom
   .create(
@@ -23,8 +35,7 @@ venom
     },
     (statusSession, session) => {
       console.log('Status Session: ', statusSession);
-    },
-    { logQR: false }
+    }
   )
   .then((client) => {
     start(client);
@@ -34,38 +45,60 @@ venom
   });
 
 async function start(client: venom.Whatsapp): Promise<void> {
-  await initializeNewAIChatSession();
-
   client.onMessage((message) => {
     (async () => {
       if (message.type === 'chat' && !message.isGroupMsg) {
-        await getHistoryMessages({
-          client,
-          history,
-          targetNumber: message.from,
-        });
+        const chatId = message.chatId;
+        console.log('Mensagem recebida:', message.body);
+        if (AI_SELECTED === 'GPT') {
+          await initializeNewAIChatSession(chatId);
+        }
 
-        messageBuffer.push(message.body);
+        if (!messageBufferPerChatId.has(chatId)) {
+          messageBufferPerChatId.set(chatId, []);
+        }
+        messageBufferPerChatId.set(chatId, [
+          ...messageBufferPerChatId.get(chatId),
+          message.body,
+        ]);
 
-        clearTimeout(messageTimer);
-        messageTimer = setTimeout(() => {
-          (async () => {
-            const answer = await mainOpenAI({
-              currentMessage: messageBuffer.join(' \n '),
-              history,
-              name: message.sender.name,
-            });
-            const messages = splitMessages(answer);
-            const delay = 3000;
-            await sendMessagesWithDelay({
-              client,
-              delay,
-              messages,
-              targetNumber: message.from,
-            });
-            messageBuffer = [];
-          })();
-        }, 10000);
+        if (messageTimeouts.has(chatId)) {
+          clearTimeout(messageTimeouts.get(chatId));
+        }
+        console.log('Aguardando novas mensagens...');
+        messageTimeouts.set(
+          chatId,
+          setTimeout(() => {
+            (async () => {
+              console.log(
+                'Gerando resposta para: ',
+                [...messageBufferPerChatId.get(chatId)].join(' \n ')
+              );
+              const currentMessage = [
+                ...messageBufferPerChatId.get(chatId),
+              ].join(' \n ');
+              const answer =
+                AI_SELECTED === 'GPT'
+                  ? await mainOpenAI({
+                      currentMessage,
+                      chatId,
+                    })
+                  : await mainGoogle({
+                      currentMessage,
+                      chatId,
+                    });
+              const messages = splitMessages(answer);
+              console.log('Enviando mensagens...');
+              await sendMessagesWithDelay({
+                client,
+                messages,
+                targetNumber: message.from,
+              });
+              messageBufferPerChatId.delete(chatId);
+              messageTimeouts.delete(chatId);
+            })();
+          }, 10000)
+        );
       }
     })();
   });

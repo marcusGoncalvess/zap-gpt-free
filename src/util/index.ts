@@ -1,3 +1,4 @@
+import { type Whatsapp } from '@wppconnect-team/wppconnect';
 import type venom from 'venom-bot';
 
 export function splitMessages(text: string): string[] {
@@ -7,21 +8,20 @@ export function splitMessages(text: string): string[] {
 
 export async function sendMessagesWithDelay({
   messages,
-  delay,
   client,
   targetNumber,
 }: {
   messages: string[];
-  delay: number;
-  client: venom.Whatsapp;
+  client: Whatsapp;
   targetNumber: string;
 }): Promise<void> {
-  for (const [index, msg] of messages.entries()) {
-    await new Promise((resolve) => setTimeout(resolve, index * delay));
+  for (const [, msg] of messages.entries()) {
+    const dynamicDelay = msg.length * 100;
+    await new Promise((resolve) => setTimeout(resolve, dynamicDelay));
     client
       .sendText(targetNumber, msg.trimStart())
       .then((result) => {
-        console.log('Mensagem enviada:', result);
+        console.log('Mensagem enviada:', result.body);
       })
       .catch((erro) => {
         console.error('Erro ao enviar mensagem:', erro);

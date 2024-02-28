@@ -3,37 +3,32 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 let assistant: OpenAI.Beta.Assistants.Assistant;
-let thread: OpenAI.Beta.Threads.Thread;
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_KEY,
-});
+let openai: OpenAI;
+const activeChats = new Map();
 
-export async function initializeNewAIChatSession(): Promise<void> {
+export async function initializeNewAIChatSession(
+  chatId: string
+): Promise<void> {
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_KEY,
+  });
   assistant = await openai.beta.assistants.retrieve(
     process.env.OPENAI_ASSISTANT!
   );
-  thread = await openai.beta.threads.create();
+  if (activeChats.has(chatId)) return;
+  const thread = await openai.beta.threads.create();
+  activeChats.set(chatId, thread);
 }
 
 export async function mainOpenAI({
   currentMessage,
-  history,
-  name,
+  chatId,
 }: {
   currentMessage: string;
-  history: string[];
-  name: string;
+  chatId: string;
 }): Promise<string> {
-  const instructionsHistory = `Você está falando com ${name}. ${
-    history.length > 0
-      ? `Se a conversas já estiver em andamento continue ela, Aqui estão as últimas mensagens na conversa para você ter um contexto melhor: ${history.join(
-          ';'
-        )}`
-      : ''
-  }`;
-  const instructions = `${assistant.instructions} \n ${instructionsHistory}`;
-
+  const thread = activeChats.get(chatId) as OpenAI.Beta.Threads.Thread;
   await openai.beta.threads.messages.create(thread.id, {
     role: 'user',
     content: currentMessage,
@@ -41,7 +36,7 @@ export async function mainOpenAI({
 
   const run = await openai.beta.threads.runs.create(thread.id, {
     assistant_id: assistant.id,
-    instructions,
+    instructions: assistant.instructions,
   });
 
   const messages = await checkRunStatus({ threadId: thread.id, runId: run.id });
