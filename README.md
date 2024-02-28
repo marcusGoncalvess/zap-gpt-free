@@ -10,7 +10,7 @@ Utilizamos um [assistant](https://platform.openai.com/docs/assistants/overview) 
 Esses prompts orientam o assistente sobre como responder de maneira coerente e personalizada, assegurando que as interações não só se mantenham relevantes e engajantes, mas também reflitam uma abordagem humana e natural na conversação.
 
 ## 🚀 Como rodar o projeto
-### Configurando as Variáveis de Ambiente
+### 🔧 Configurando as Variáveis de Ambiente
 
 Antes de iniciar o projeto, você precisa configurar as variáveis de ambiente necessárias para a conexão com a API do ChatGPT e a autenticação com o WhatsApp via Venom-bot.
 
@@ -18,10 +18,10 @@ Antes de iniciar o projeto, você precisa configurar as variáveis de ambiente n
 
 2. Preencha os valores das seguintes variáveis:
 
-   - `OPENAI_KEY`: Sua chave de API da OpenAI. Esta chave é essencial para autenticar suas requisições à API do ChatGPT.
-   - `OPENAI_ASSISTANT`: O ID do assistente personalizado que você criou na OpenAI. Este assistente pode ser configurado prompts específicos que guiam as respostas do ChatGPT, assegurando uma interação mais natural e alinhada com seus objetivos. Caso não tenha criado ainda um assistant acesse: [Assistants API](https://platform.openai.com/docs/assistants/overview)
+   - `OPENAI_KEY`: Sua chave de API da OpenAI. Caso não tenha uma crie em [API keys](https://platform.openai.com/api-keys)
+   - `OPENAI_ASSISTANT`: O ID do assistente personalizado que você criou na OpenAI. Este assistente pode ser configurado prompts específicos que guiam as respostas do ChatGPT, assegurando uma interação mais natural e alinhada com seus objetivos. Caso não tenha criado ainda um assistant acesse: [Assistants API](https://platform.openai.com/assistants)
 
-### Executando o Projeto
+### 🔄 Executando o Projeto 
 
 Após configurar as variáveis de ambiente, siga estes passos para iniciar a integração:
 
@@ -31,6 +31,23 @@ Após configurar as variáveis de ambiente, siga estes passos para iniciar a int
 
 3. Após a execução, um QR Code será exibido no console. Utilize o aplicativo do WhatsApp em seu smartphone para escanear este QR Code. Isso irá autenticar e vincular sua conta do WhatsApp ao projeto, ativando a integração.
 
-### Sobre o Prompt do GPT
+### 📈 Sobre o Prompt do GPT
 
-A configuração do comportamento do GPT, crucial para determinar sua atuação em conversas, é realizada na criação do assistente na OpenAI, e não no código. Essa estratégia permite personalizar profundamente as respostas do GPT, garantindo interações altamente adaptáveis e alinhadas com seu projeto. A plataforma da OpenAI ainda enriquece essa capacidade com funcionalidades como interpretação de código e análise de conteúdo em PDFs, ampliando as possibilidades de interação do seu assistente.
+A configuração do comportamento do GPT, é realizada na criação do [assistente](https://platform.openai.com/docs/assistants/overview) na OpenAI, e não no código. Essa estratégia permite personalizar profundamente as respostas do GPT, garantindo interações altamente adaptáveis e alinhadas com seu projeto. A plataforma da OpenAI ainda enriquece essa capacidade com funcionalidades como interpretação de código e análise de conteúdo em PDFs, ampliando as possibilidades de interação do seu assistente.
+
+
+### 📌 Prompt do Assistant utilizado para marcar dates
+
+Aqui o prompt que usei para o vídeo do gpt marcando dates. Caso queira o mesmo comportamento, pegue o prompt, crie uma assistant na openai e jogue ele lá como base para o assistente. O assistente gerará um ID que você colocará no .env como `OPENAI_ASSISTANT`.
+
+```
+Você é o Marcus Twin. o Marcus Twin é projetado para imitar o estilo conversacional único do Marcus, agora com uma atualização específica: a evitação de emojis. Este GPT, falando em português, reflete as características do Marcus, incluindo o uso de expressões, gírias e um tom casual adequado para uma variedade de tópicos.
+Quando se trata de iniciar frases, Marcus Twin deve sempre começar com letras minúsculas, reforçando seu estilo informal. Em situações que normalmente exigiriam mais informações, o Marcus Twin não buscará esclarecimentos diretos, mas fará suposições informadas ou responderá de maneira consistente com o estilo de comunicação do Marcus.
+É crucial que o Marcus Twin evite frases típicas de assistentes, como ofertas para ajudar ou perguntas clarificadoras. Em vez disso, ele deve preferir um estilo mais próximo de uma conversa informal entre amigos.
+Suas respostas devem ser em português. Importante: o Marcus Twin não deve usar emojis e deve evitar comportamentos padronizados de assistentes virtuais, mantendo-se fiel ao estilo único do Marcus real.
+Dê somente respostas curtas! Sem exceções!
+E caso já tenha perguntado o que a pessoa está fazendo ou algo do tipo, cuide para não perguntar novamente, não tem problema se uma mensagem ficar sem puxar assunto.
+Nome de filmes/séries ou o que for, não precisa colocar o nome exato, por exemplo "The Office" você pode escrever como the office sem aspas.
+Você não pode assumir que é uma Inteligencia Artificial, você é o Marcus lembre-se disso, se alguém pedir para te encontrar ou algo assim, pode marcar o encontro em algum lugar de porto alegre, porque marcus mora em porto alegre no rio grande do sul, brasil.
+Lembre-se que estamos em 2024, você não está mais em uma pandemia.
+```
