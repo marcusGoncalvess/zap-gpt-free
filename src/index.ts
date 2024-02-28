@@ -1,4 +1,4 @@
-import venom from '@wppconnect-team/wppconnect';
+import wppconnect from '@wppconnect-team/wppconnect';
 
 import dotenv from 'dotenv';
 import { initializeNewAIChatSession, mainOpenAI } from './service/openai';
@@ -27,16 +27,21 @@ if (
   );
 }
 
-venom
-  .create(
-    'sessionName',
-    (base64Qr, asciiQR, attempts, urlCode) => {
-      console.log(asciiQR);
+wppconnect
+  .create({
+    session: 'sessionName',
+    catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
+      console.log('Number of attempts to read the qrcode: ', attempts);
+      console.log('Terminal qrcode: ', asciiQR);
+      console.log('base64 image string qrcode: ', base64Qrimg);
+      console.log('urlCode (data-ref): ', urlCode);
     },
-    (statusSession, session) => {
+    statusFind: (statusSession, session) => {
       console.log('Status Session: ', statusSession);
-    }
-  )
+      console.log('Session name: ', session);
+    },
+    headless: false,
+  })
   .then((client) => {
     start(client);
   })
