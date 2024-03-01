@@ -6,7 +6,8 @@
   "scripts": {
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src"
+    "build": "tsup src",
+    "start": "pm2 start dist/index.cjs --name zap-gpt"
   },
   "keywords": [],
   "author": {
@@ -38,6 +39,7 @@
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-promise": "^6.0.0",
+    "pm2": "^5.3.1",
     "prettier": "^3.2.4",
     "tsup": "^8.0.1",
     "tsx": "^4.7.0",
