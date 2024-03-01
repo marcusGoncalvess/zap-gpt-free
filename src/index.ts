@@ -40,7 +40,7 @@ wppconnect
       console.log('Status Session: ', statusSession);
       console.log('Session name: ', session);
     },
-    headless: false,
+    headless: 'new' as any,
   })
   .then((client) => {
     start(client);
