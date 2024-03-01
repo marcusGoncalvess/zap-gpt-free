@@ -8,8 +8,7 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
     "start": "npm run build && npx pm2 start dist/index.cjs --name zap-gpt --no-daemon",
-    "stop": "npx pm2 delete zap-gpt",
-    "postinstall": "./install-dependencies.sh"
+    "stop": "npx pm2 delete zap-gpt"
   },
   "keywords": [],
   "author": {
