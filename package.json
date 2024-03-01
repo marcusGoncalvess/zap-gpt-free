@@ -7,7 +7,7 @@
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
-    "start": "npm install && npx pm2 start dist/index.cjs --name zap-gpt",
+    "start": "npx pm2 start dist/index.cjs --name zap-gpt",
     "stop": "npx pm2 delete zap-gpt"
   },
   "keywords": [],
