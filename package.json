@@ -7,7 +7,8 @@
     "config": "node ./setup.js",
     "dev": "tsx watch src/index.ts",
     "build": "tsup src",
-    "start": "pm2 start dist/index.cjs --name zap-gpt"
+    "start": "npm install && npx pm2 start dist/index.cjs --name zap-gpt",
+    "stop": "npx pm2 delete zap-gpt"
   },
   "keywords": [],
   "author": {
@@ -26,8 +27,7 @@
     "csv-stringify": "^6.4.5",
     "dotenv": "^16.3.2",
     "inquirer": "^9.2.15",
-    "openai": "^4.24.2",
-    "venom-bot": "^5.0.21"
+    "openai": "^4.24.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.8",
