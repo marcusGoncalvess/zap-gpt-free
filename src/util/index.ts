@@ -2,7 +2,9 @@ import { type Whatsapp } from '@wppconnect-team/wppconnect';
 import type venom from 'venom-bot';
 
 export function splitMessages(text: string): string[] {
-  const matches = text.match(/[^.?!]+[.?!]+["']?|[^.?!]+$/g);
+  const matches = text.match(
+    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^.?!\s]+[.?!]+["']?|[^.?!]+)$/g
+  );
   return matches ?? [];
 }
 
