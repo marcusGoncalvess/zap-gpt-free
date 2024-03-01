@@ -29,30 +29,3 @@ export async function sendMessagesWithDelay({
       });
   }
 }
-
-export async function getHistoryMessages({
-  targetNumber,
-  client,
-  history,
-}: {
-  targetNumber: string;
-  client: Whatsapp;
-  history: string[];
-}): Promise<void> {
-  if (history.length > 0) return;
-  const historyInternal = await client.getAllMessagesInChat(
-    targetNumber,
-    true,
-    false
-  );
-  const textMessages = historyInternal
-    .filter((msg) => msg.type === 'chat')
-    .slice(-30)
-    .map((msg) => {
-      const isFromMe = msg.from === '555192194386@c.us';
-      return `${
-        isFromMe ? 'mensagem marcus' : `mensagem ${msg.sender.shortName}`
-      }: ${msg.body}`;
-    });
-  history = textMessages;
-}
