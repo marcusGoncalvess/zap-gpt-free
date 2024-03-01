@@ -1,10 +1,9 @@
 import { type Whatsapp } from '@wppconnect-team/wppconnect';
-import type venom from 'venom-bot';
 
 export function splitMessages(text: string): string[] {
-  const matches = text.match(
-    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^.?!\s]+[.?!]+["']?|[^.?!]+)$/g
-  );
+  const pattern =
+    /(?:http[s]?:\/\/[^\s]+)|(?:www\.[^\s]+)|[^.?!]+(?:[.?!]+["']?|$)/g;
+  const matches = text.match(pattern);
   return matches ?? [];
 }
 
@@ -37,7 +36,7 @@ export async function getHistoryMessages({
   history,
 }: {
   targetNumber: string;
-  client: venom.Whatsapp;
+  client: Whatsapp;
   history: string[];
 }): Promise<void> {
   if (history.length > 0) return;
