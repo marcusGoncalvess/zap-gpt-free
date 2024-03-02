@@ -31,10 +31,7 @@ wppconnect
   .create({
     session: 'sessionName',
     catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
-      console.log('Number of attempts to read the qrcode: ', attempts);
       console.log('Terminal qrcode: ', asciiQR);
-      console.log('base64 image string qrcode: ', base64Qrimg);
-      console.log('urlCode (data-ref): ', urlCode);
     },
     statusFind: (statusSession, session) => {
       console.log('Status Session: ', statusSession);
@@ -52,7 +49,11 @@ wppconnect
 async function start(client: wppconnect.Whatsapp): Promise<void> {
   client.onMessage((message) => {
     (async () => {
-      if (message.type === 'chat' && !message.isGroupMsg) {
+      if (
+        message.type === 'chat' &&
+        !message.isGroupMsg &&
+        message.chatId !== 'status@broadcast'
+      ) {
         const chatId = message.chatId;
         console.log('Mensagem recebida:', message.body);
         if (AI_SELECTED === 'GPT') {
