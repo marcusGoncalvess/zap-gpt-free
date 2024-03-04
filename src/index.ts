@@ -93,6 +93,7 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
                       currentMessage,
                       chatId,
                     });
+              if (answer === '_fim') return;
               const messages = splitMessages(answer);
               console.log('Enviando mensagens...');
               await sendMessagesWithDelay({
