@@ -1,10 +1,30 @@
 import { type Whatsapp } from '@wppconnect-team/wppconnect';
 
 export function splitMessages(text: string): string[] {
-  const pattern =
-    /(?:http[s]?:\/\/[^\s]+)|(?:www\.[^\s]+)|[^.?!]+(?:[.?!]+["']?|$)/g;
-  const matches = text.match(pattern);
-  return matches ?? [];
+  const urlEmailPattern =
+    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+@[^\s]+\.[^\s]+)/g;
+  const placeholders = text.match(urlEmailPattern) || [];
+
+  const placeholder = 'PLACEHOLDER_';
+  let currentIndex = 0;
+  const textWithPlaceholders = text.replace(
+    urlEmailPattern,
+    () => `${placeholder}${currentIndex++}`
+  );
+
+  const splitPattern = /[^.?!]+(?:[.?!]+["']?|$)/g;
+  let parts = textWithPlaceholders.match(splitPattern) ?? ([] as string[]);
+
+  if (placeholders.length > 0) {
+    parts = parts.map((part) =>
+      placeholders.reduce(
+        (acc, val, idx) => acc.replace(`${placeholder}${idx}`, val),
+        part
+      )
+    );
+  }
+
+  return parts;
 }
 
 export async function sendMessagesWithDelay({
