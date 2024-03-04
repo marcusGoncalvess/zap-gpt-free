@@ -1,14 +1,14 @@
 import { type Whatsapp } from '@wppconnect-team/wppconnect';
 
 export function splitMessages(text: string): string[] {
-  const urlEmailPattern =
-    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+@[^\s]+\.[^\s]+)/g;
-  const placeholders = text.match(urlEmailPattern) || [];
+  const complexPattern =
+    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+@[^\s]+\.[^\s]+)|(["'].*?["'])/g;
+  const placeholders = text.match(complexPattern) ?? [];
 
   const placeholder = 'PLACEHOLDER_';
   let currentIndex = 0;
   const textWithPlaceholders = text.replace(
-    urlEmailPattern,
+    complexPattern,
     () => `${placeholder}${currentIndex++}`
   );
 
