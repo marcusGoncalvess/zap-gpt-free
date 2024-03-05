@@ -61,7 +61,7 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
         }
 
         if (!messageBufferPerChatId.has(chatId)) {
-          messageBufferPerChatId.set(chatId, []);
+          messageBufferPerChatId.set(chatId, [message.body]);
         } else {
           messageBufferPerChatId.set(chatId, [
             ...messageBufferPerChatId.get(chatId),
