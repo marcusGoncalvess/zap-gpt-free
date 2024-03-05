@@ -102,7 +102,6 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
                   }
                 }
               }
-              if (answer === '_fim') return;
               const messages = splitMessages(answer);
               console.log('Enviando mensagens...');
               await sendMessagesWithDelay({
@@ -113,7 +112,7 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
               messageBufferPerChatId.delete(chatId);
               messageTimeouts.delete(chatId);
             })();
-          }, 10000)
+          }, 60000)
         );
       }
     })();
