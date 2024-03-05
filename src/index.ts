@@ -11,6 +11,7 @@ type AIOption = 'GPT' | 'GEMINI';
 const messageBufferPerChatId = new Map();
 const messageTimeouts = new Map();
 const AI_SELECTED: AIOption = (process.env.AI_SELECTED as AIOption) || 'GEMINI';
+const MAX_RETRIES = 3;
 
 if (AI_SELECTED === 'GEMINI' && !process.env.GEMINI_KEY) {
   throw Error(
@@ -80,16 +81,27 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
               const currentMessage = !messageBufferPerChatId.has(chatId)
                 ? message.body
                 : [...messageBufferPerChatId.get(chatId)].join(' \n ');
-              const answer =
-                AI_SELECTED === 'GPT'
-                  ? await mainOpenAI({
-                      currentMessage,
-                      chatId,
-                    })
-                  : await mainGoogle({
+              let answer = '';
+              for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+                try {
+                  if (AI_SELECTED === 'GPT') {
+                    answer = await mainOpenAI({
                       currentMessage,
                       chatId,
                     });
+                  } else {
+                    answer = await mainGoogle({
+                      currentMessage,
+                      chatId,
+                    });
+                  }
+                  break;
+                } catch (error) {
+                  if (attempt === MAX_RETRIES) {
+                    throw error;
+                  }
+                }
+              }
               if (answer === '_fim') return;
               const messages = splitMessages(answer);
               console.log('Enviando mensagens...');
