@@ -77,9 +77,9 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
           chatId,
           setTimeout(() => {
             (async () => {
-              const currentMessage = [
-                ...messageBufferPerChatId.get(chatId),
-              ].join(' \n ');
+              const currentMessage = !messageBufferPerChatId.has(chatId)
+                ? message.body
+                : [...messageBufferPerChatId.get(chatId)].join(' \n ');
               const answer =
                 AI_SELECTED === 'GPT'
                   ? await mainOpenAI({
