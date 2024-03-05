@@ -62,11 +62,12 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
 
         if (!messageBufferPerChatId.has(chatId)) {
           messageBufferPerChatId.set(chatId, []);
+        } else {
+          messageBufferPerChatId.set(chatId, [
+            ...messageBufferPerChatId.get(chatId),
+            message.body,
+          ]);
         }
-        messageBufferPerChatId.set(chatId, [
-          ...messageBufferPerChatId.get(chatId),
-          message.body,
-        ]);
 
         if (messageTimeouts.has(chatId)) {
           clearTimeout(messageTimeouts.get(chatId));
