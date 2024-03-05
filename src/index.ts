@@ -76,10 +76,6 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
           chatId,
           setTimeout(() => {
             (async () => {
-              console.log(
-                'Gerando resposta para: ',
-                [...messageBufferPerChatId.get(chatId)].join(' \n ')
-              );
               const currentMessage = [
                 ...messageBufferPerChatId.get(chatId),
               ].join(' \n ');
