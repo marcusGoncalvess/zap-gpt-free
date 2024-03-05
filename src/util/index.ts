@@ -2,7 +2,7 @@ import { type Whatsapp } from '@wppconnect-team/wppconnect';
 
 export function splitMessages(text: string): string[] {
   const complexPattern =
-    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+@[^\s]+\.[^\s]+)|(["'].*?["'])/g;
+    /(http[s]?:\/\/[^\s]+)|(www\.[^\s]+)|([^\s]+@[^\s]+\.[^\s]+)|(["'].*?["'])|(\b\d+\.\s)|(\w+\.\w+)/g;
   const placeholders = text.match(complexPattern) ?? [];
 
   const placeholder = 'PLACEHOLDER_';
@@ -12,7 +12,7 @@ export function splitMessages(text: string): string[] {
     () => `${placeholder}${currentIndex++}`
   );
 
-  const splitPattern = /[^.?!]+(?:[.?!]+["']?|$)/g;
+  const splitPattern = /(?<!\b\d+\.\s)(?<!\w+\.\w+)[^.?!]+(?:[.?!]+["']?|$)/g;
   let parts = textWithPlaceholders.match(splitPattern) ?? ([] as string[]);
 
   if (placeholders.length > 0) {
