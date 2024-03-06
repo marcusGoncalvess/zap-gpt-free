@@ -55,7 +55,6 @@ async function start(client: wppconnect.Whatsapp): Promise<void> {
   client.onMessage((message) => {
     (async () => {
       const chatId = message.chatId;
-      console.log(PHONE_NUMBERS);
 
       if (
         message.type === 'chat' &&

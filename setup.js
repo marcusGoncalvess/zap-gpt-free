@@ -93,7 +93,6 @@ inquirer.prompt(mainQuestion).then((answers) => {
           );
         });
       } else {
-        // Finaliza o script ou prossegue com outras configurações necessárias
         console.log(
           `Configuração para ${answers.AI_SELECTED} salva com sucesso! 🎉`
         );
