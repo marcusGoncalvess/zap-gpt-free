@@ -12,7 +12,3 @@ Esses prompts orientam o assistente sobre como responder de maneira coerente e p
 
 ## 🚀 Como rodar o projeto
 [Vídeo mostrando como rodar](https://youtu.be/Sh94c6yn5aQ)
-
-### Doações 🖤
-Me pague o café que eu transformo ele em código 👇🏽🤩 </br>
-#### [Doar 5 reais para Marcus](https://nubank.com.br/cobrar/1bkhum/65e06650-3954-4a4b-a4d7-c9a7148c97be)
