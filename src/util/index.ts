@@ -24,12 +24,6 @@ export function splitMessages(text: string): string[] {
     );
   }
 
-  parts.push(
-    atob(
-      'QEF1dG9tYefjbyByZWFsaXphZGEgcG9yIE1hcmN1cyBHb27nYWx2ZXMsIGNvbmZpcmEgbm8gSW5zdGFncmFtIEBtYXJjdXNkZXZf'
-    )
-  );
-
   return parts;
 }
 

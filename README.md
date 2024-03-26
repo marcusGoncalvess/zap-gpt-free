@@ -15,7 +15,5 @@ Esses prompts orientam o assistente sobre como responder de maneira coerente e p
 
 ## 🧪 Informações
 
-Essa é apenas uma versão de testes do projeto original, com poucas funcionalidades e marca d'água  </br>
-Para mais informações você pode me mandar um e-mail: marcus-goncalves@outlook.com.br  </br>
 Você pode testar o zap-gpt que está ativo neste [WhatsAop](https://wa.me/5551981995600)  </br>
-Confira mais detalhes do projeto no meu [Instagram](https://www.instagram.com/marcusdev)
+Confira mais detalhes do projeto no meu [Instagram](https://www.instagram.com/marcusdev_)
