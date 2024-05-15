@@ -7,11 +7,15 @@ import { mainGoogle } from './service/google';
 
 dotenv.config();
 type AIOption = 'GPT' | 'GEMINI';
+type PhoneNumbers = string[];
 
 const messageBufferPerChatId = new Map();
 const messageTimeouts = new Map();
 const AI_SELECTED: AIOption = (process.env.AI_SELECTED as AIOption) || 'GEMINI';
 const MAX_RETRIES = 3;
+const PHONE_NUMBERS: PhoneNumbers = process.env.PHONE_NUMBERS
+  ? process.env.PHONE_NUMBERS.split(',')
+  : [];
 
 if (AI_SELECTED === 'GEMINI' && !process.env.GEMINI_KEY) {
   throw Error(
@@ -50,12 +54,14 @@ wppconnect
 async function start(client: wppconnect.Whatsapp): Promise<void> {
   client.onMessage((message) => {
     (async () => {
+      const chatId = message.chatId;
+
       if (
         message.type === 'chat' &&
         !message.isGroupMsg &&
-        message.chatId !== 'status@broadcast'
+        message.chatId !== 'status@broadcast' &&
+        (PHONE_NUMBERS.length === 0 || PHONE_NUMBERS.includes(chatId))
       ) {
-        const chatId = message.chatId;
         console.log('Mensagem recebida:', message.body);
         if (AI_SELECTED === 'GPT') {
           await initializeNewAIChatSession(chatId);
