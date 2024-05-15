@@ -15,7 +15,7 @@ Esses prompts orientam o assistente sobre como responder de maneira coerente e p
 
 ## 🧪 Informações
 
-Você pode testar o zap-gpt que está ativo neste [WhatsAop](https://wa.me/5551981995600)  </br>
+Você pode testar o zap-gpt que está ativo neste [WhatsApp](https://wa.me/5551981995600)  </br>
 Confira mais detalhes do projeto no meu [Instagram](https://www.instagram.com/marcusdev_)
 
 ## 🎉 Zap-GPT-Plus
@@ -32,4 +32,5 @@ O **Zap-GPT-Plus** é uma versão aprimorada do Zap-GPT, oferecendo diversas fun
 
 Com o **Zap-GPT-Plus**, você tem mais controle, segurança e eficiência! 🚀
 
-Adquira agora através do [link](https://pay.kiwify.com.br/akcGXnQ).
+Adquira agora [clicando aqui!](https://pay.kiwify.com.br/akcGXnQ) </br>
+Tire suas dúvidas via [WhatsApp](https://wa.me/5551981995600)  </br>
